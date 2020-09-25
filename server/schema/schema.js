@@ -1,20 +1,42 @@
-const graphql=require("qraphql");
+const graphql = require("graphql");
+// const graphql = require('graphql');
+const _ = require("lodash")
 
-const {GrapQLObjectType,GrapQLString}=graphql
 
-const BookType=new GraphQLObjectType({
+const {GraphQLObjectType,GraphQLString,GraphQLSchema}=graphql
+// dummy data
+var books = [
+    { name: 'Name of the Wind', genre: 'Fantasy', id: '1' },
+    { name: 'The Final Empire', genre: 'Fantasy', id: '2' },
+    { name: 'The Long Earth', genre: 'Sci-Fi', id: '3' },
+];
+
+
+const BookType= new GraphQLObjectType({
     name:"Book",
     fields:()=>({
-        id:{type:GrapQLString},
-        name:{type:GrapQLString},
-        genre:{type:GrapQLString},
+        id:{type:GraphQLString},
+        name:{type:GraphQLString},
+        genre:{type:GraphQLString},
     })
+}) 
+ 
+const RootQuery= new GraphQLObjectType({
+    name:"RootQueryType",
+    fields:{   
+        book: {
+        type:BookType,
+        args:{id:{ type : GraphQLString }},
+        resolve(parent,args){
+            return _.find(books, { id: args.id });
+        }
+    }
+    }
 })
 
-const RootQuery=new GraphQLObjectType({
-    name:"RootQueryType",
-    fields:{
-        type:BookType,
-        args:{id:{type:GrapqlHTTP}},
-    }
+
+
+
+module.exports = new GraphQLSchema({
+    query:RootQuery
 })
