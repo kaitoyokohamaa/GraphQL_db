@@ -4,10 +4,11 @@ const schema = require('./schema/schema');
 const mongoose = require("mongoose")
 const app = express();
 
-mongoose.connect("mongodb+srv://cluster0.sgx5v.mongodb.net/<kaito>", { useNewUrlParser: true })
+mongoose.connect("mongodb://localhost:27017/myapp", { useNewUrlParser:  true, useUnifiedTopology: true })
 mongoose.connection.once("open",()=>{
     console.log("connected to database")
 })
+new Promise(() => { throw new Error(); });
 mongoose.set('useCreateIndex', true);
 // bind express with graphql
 app.use('/graphql', graphqlHTTP({
